@@ -106,10 +106,11 @@ class HomeWidget {
   }
 
     static bool? _handleIsInstalledWidgetData(dynamic value) {
-    if (value != null) {
-      return value["isAddWidget"];
-    } else {
-      return null;
+      if (value != null) {
+        return value["isAddWidget"];
+      } else {
+        return null;
+      }
     }
 
 }
