@@ -97,4 +97,17 @@ class HomeWidget {
     ];
     return _channel.invokeMethod('registerBackgroundCallback', args);
   }
+
+
+  static Future<bool?> isInstalledWidget() {
+    return _channel.invokeMethod('isInstalledWidget').then(_handleIsInstalledWidgetData(value));
+  }
+
+    static bool? _handleIsInstalledWidgetData(dynamic value) {
+    if (value != null) {
+      return value["isAddWidget"];
+    } else {
+      return null;
+    }
+
 }
