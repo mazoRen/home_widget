@@ -107,16 +107,23 @@ public class SwiftHomeWidgetPlugin: NSObject, FlutterPlugin, FlutterStreamHandle
             result(initialUrl?.absoluteString)
         } else if call.method == "registerBackgroundCallback" {
             result(nil)
-        } else if call.method == "isInstalledWidget"
-
-
+        } else if call.method == "isInstalledWidget"{
+            guard let args = call.arguments else {
+                return
+            }
+        
             if let myArgs = args as? [String: Any?],
-               let widgetKind = myArgs["widgetKind"] as? String,
+               let widgetKind = myArgs["widgetKind"]  {
+                isWidgetExist(widgetKind: widgetKind as! String) { exist in
+                    let args = ["isAddWidget":exist]
+                    result(args)
+                }
+            } else {
+                result(FlutterError(code: "-2", message: "InvalidArguments isInstalledWidget must be called with widgetKind", details: nil))
+            }
+                
+        }
 
-            self.isWidgetExist(widgetKind: widgetKind) {exist in
-                  let args = ["isAddWidget":exist]
-                  result(args)
-              }
         else {
             result(FlutterMethodNotImplemented)
         }
