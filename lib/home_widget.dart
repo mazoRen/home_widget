@@ -102,7 +102,7 @@ class HomeWidget {
   static Future<bool?> isInstalledWidget(String widgetKind) {
     return _channel.invokeMethod('isInstalledWidget',{
       'widgetKind': widgetKind,
-    }).then(_handleIsInstalledWidgetData(value));
+    }).then(_handleIsInstalledWidgetData);
   }
 
     static bool? _handleIsInstalledWidgetData(dynamic value) {
