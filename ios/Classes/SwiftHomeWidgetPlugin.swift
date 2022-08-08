@@ -107,7 +107,17 @@ public class SwiftHomeWidgetPlugin: NSObject, FlutterPlugin, FlutterStreamHandle
             result(initialUrl?.absoluteString)
         } else if call.method == "registerBackgroundCallback" {
             result(nil)
-        } else {
+        } else if call.method == "isInstalledWidget"
+
+
+            if let myArgs = args as? [String: Any?],
+               let widgetKind = myArgs["widgetKind"] as? String,
+
+            self.isWidgetExist(widgetKind: widgetKind) {exist in
+                  let args = ["isAddWidget":exist]
+                  result(args)
+              }
+        else {
             result(FlutterMethodNotImplemented)
         }
     }
@@ -145,4 +155,29 @@ public class SwiftHomeWidgetPlugin: NSObject, FlutterPlugin, FlutterStreamHandle
         return components?.queryItems?.contains(where: {(item) in item.name == "homeWidget"}) ?? false
     
     }
+
+/// 判断widget是否存在
+    private func isWidgetExist(widgetKind: String ,complete: @escaping (_ exist: Bool) -> Void) {
+        if #available(iOS 14.0, *) {
+            WidgetCenter.shared.getCurrentConfigurations { result in
+                var exist = false
+                defer {
+                    complete(exist)
+                }
+                guard case .success(let widgets) = result else {
+                    return
+                }
+                let currentWidget = widgets.first( where: { widget in
+                    return widget.kind == widgetKind
+                })
+                if currentWidget != nil {
+                    exist = true
+                }
+            }
+        } else {
+            complete(false)
+        }
+    }
+
+
 }
